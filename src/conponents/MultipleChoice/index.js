@@ -1,16 +1,37 @@
 import React, {Component} from 'react';
+import FormWork from "../FormWork";
+import List from "../List";
+import ButtonAdd from "../ButtonAdd";
 
 class MultipleChoice extends Component {
-    constructor(props, create_at = null) {
-        super(props, create_at);
+    constructor(props) {
+        super(props);
         this.i = 0;
-        this.localHtml = '';
-        this.create_at = create_at ? create_at : Date.now().toString();
+        this.state = {
+            listItem: [
+                {
+                    id: 1,
+                    startDate: "09.01.2020",
+                    endDate: "09.01.2021",
+                    data: "чего то там такое"
+                },
+                {
+                    id: 2,
+                    startDate: "09.01.2020",
+                    endDate: "09.01.2021",
+                    data: "чего то там такое"
+                }
+            ],
+        };
 
-        this.addBlock = this.addBlock.bind(this);
+
+        this.createItem = this.createItem.bind(this);
         this.buttonList = this.buttonList.bind(this);
+        this.addBlock = this.addBlock.bind(this);
     }
-    static  storage = window.localStorage;
+
+    // static  storage = window.localStorage;
+
     static createElement(tag = 'div', classes = [], attributes = {}, textContent = '') {
         if (typeof tag !== 'string') {
             console.warn('Tag in createElement must be a string');
@@ -58,7 +79,7 @@ class MultipleChoice extends Component {
         cardParent.remove();
     }
 
-    addBlock() {
+    addBlock(item) {
         const mul = document.querySelector('.multiple');
         const mulInn = MultipleChoice.createElement(
             'div',
@@ -68,34 +89,34 @@ class MultipleChoice extends Component {
         const inputMultipleStart = MultipleChoice.createElement(
             'input',
             [],
-            {type: 'date', id: 'dateFrom'}
+            {type: 'date', id: `dateFrom${this.i}`}
         );
         const labelMultipleStart = MultipleChoice.createElement(
             'label',
             [],
-            {for: 'dateFrom'},
+            {for: `dateFrom${this.i}`},
             `${this.props.dateStart}`
         );
         const inputMultipleEnd = MultipleChoice.createElement(
             'input',
             [],
-            {type: 'date', id: 'dateTo'});
+            {type: 'date', id: `dateTo${this.i}`});
 
         const labelMultipleEnd = MultipleChoice.createElement(
             'label',
             [],
-            {for: 'dateTo'},
+            {for: `dateTo${this.i}`},
             `${this.props.dateFinish}`
         );
         const textareaMultiple = MultipleChoice.createElement(
             'textarea',
             [],
-            {id: 'workplace'}
+            {id: `workplace${this.i}`}
         );
         const labelTextareaMultiple = MultipleChoice.createElement(
             'label',
             [],
-            {for: 'workplace'},
+            {for: `workplace${this.i}`},
             `${this.props.information}`
         );
         const buttonDeleteMultiple = MultipleChoice.createElement(
@@ -113,27 +134,39 @@ class MultipleChoice extends Component {
             textareaMultiple,
             buttonDeleteMultiple
         );
-        mulInn.addEventListener('click', this.buttonList);
+        mulInn.querySelector('.btn_delete').addEventListener('click', this.buttonList);
         return mulInn;
     }
 
+    createItem(item) {
+        const {listItem} = this.state;
+        this.setState({
+            listItem: [item, ...listItem],
+        });
+    }
+
     render() {
+        const { listItem } = this.state;
         return (
             <>
-                <h2 className="title__block">{this.props.title}</h2>
-                <div className="multiple">
-                    <div className="multiple__inner" id={this.i}>
-                        <label htmlFor="dateFrom">{this.props.dateStart}</label>
-                        <input type="date" id="dateFrom"/>
-                        <label htmlFor="dateTo">{this.props.dateFinish}</label>
-                        <input type="date" id="dateTo"/>
-                        <label htmlFor="workplace">{this.props.information}</label>
-                        <textarea id="workplace"/>
-                    </div>
-
-
-                </div>
-                <button type="button" className="btn_add" onClick={this.addBlock}>Add</button>
+                <FormWork
+                    dataItem={listItem}
+                    addFromProps={this.createItem}
+                    buttonList={this.buttonList}
+                    title={this.props.title}
+                    dateStart={this.props.dateStart}
+                    dateFinish={this.props.dateFinish}
+                    information={this.props.information}
+                />
+                <ButtonAdd
+                    addBlock={this.addBlock}
+                />
+                <List
+                    listItem={listItem}
+                    dateStart={this.props.dateStart}
+                    dateFinish={this.props.dateFinish}
+                    information={this.props.information}
+                />
             </>
         )
     }

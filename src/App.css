@@ -2,6 +2,26 @@ body {
     font-family: Arial, serif;
     background: #007f64;
 }
+ul {
+    list-style: none;
+    padding: 0;
+    width: 50%;
+    margin: 0 auto;
+}
+.item__head {
+    display: flex;
+    justify-content: space-between;
+}
+.item__head__title {
+    color: #e8c700;
+}
+.item {
+    box-sizing: border-box;
+    padding: 15px;
+    border: 1px solid #e8c700;
+    border-radius: 8px;
+    margin-top: 15px;
+}
 .formApp {
     display: flex;
     flex-direction: column;
@@ -25,6 +45,7 @@ body {
     padding-bottom: 0;
     border-bottom: none;
 }
+
 input,
 .btn_add {
     margin:5px 0 15px;
@@ -32,10 +53,15 @@ input,
     padding: 15px 10px;
     border-radius: 8px;
 }
+.btn_add {
+    display: block;
+    width: 50%;
+    margin: 5px auto;
+}
 label {
     color: #e8c700;
 }
-#workplace {
+textarea {
     height: 120px;
     border-radius: 8px;
     border: 2px solid #e8c700;
